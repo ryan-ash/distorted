@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.19117647, g: 0.19117647, b: 0.19117647, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -368,7 +368,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 201b5fbc52733435a9b677451decca3d, type: 3}
+    m_Font: {fileID: 12800000, guid: d524aa3cb2c9d4f028de78e9485a1b2c, type: 3}
     m_FontSize: 82
     m_FontStyle: 0
     m_BestFit: 1
@@ -380,7 +380,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Distorted
+  m_Text: "    D\n   I\n  S\n T\nO\n R\n  T\n   E\n    D"
 --- !u!114 &114591012982340642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -601,7 +601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15, y: -15.000046}
+  m_AnchoredPosition: {x: -15, y: -15}
   m_SizeDelta: {x: 160, y: -30}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &224294173541655172

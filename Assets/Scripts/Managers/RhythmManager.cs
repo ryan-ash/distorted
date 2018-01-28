@@ -75,12 +75,14 @@ public class RhythmManager : MonoBehaviour {
         switch(currentRound) {
             case 1:
                 SettingsManager.instance.playerActivePassiveTime = squareLength / 4;
+                SettingsManager.instance.symbolMoveTime = squareLength / 4;
                 nextRound = 2;
                 ignoreScore = true;
                 currentRoundLength = squareLength * 4;
                 break;
             case 2:
                 SettingsManager.instance.playerActivePassiveTime = squareLength / 8;
+                SettingsManager.instance.symbolMoveTime = squareLength / 4;
                 nextRound = 2;
                 prevRound = 2;
                 scoreToNextRound = 40;
@@ -89,6 +91,7 @@ public class RhythmManager : MonoBehaviour {
                 currentRoundLength = squareLength * 2;
                 break;
             case 3:
+                SettingsManager.instance.symbolMoveTime = squareLength / 8;
                 nextRound = 3;
                 prevRound = 2;
                 scoreToNextRound = 80;
@@ -98,6 +101,7 @@ public class RhythmManager : MonoBehaviour {
                 break;
             case 4:
                 SettingsManager.instance.playerActivePassiveTime = squareLength / 8;
+                SettingsManager.instance.symbolMoveTime = squareLength / 8;
                 nextRound = 4;
                 prevRound = 3;
                 scoreToNextRound = 120;
@@ -112,6 +116,7 @@ public class RhythmManager : MonoBehaviour {
                 currentRoundLength = squareLength * 5;
                 break;
             case 6:
+                SettingsManager.instance.symbolMoveTime = squareLength / 16;
                 nextRound = 6;
                 prevRound = 4;
                 scoreToNextRound = 160;

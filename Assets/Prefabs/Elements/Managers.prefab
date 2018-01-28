@@ -72,6 +72,9 @@ MonoBehaviour:
   playerPulseScaleUpTo: 1.5
   conversionTableShiftTime: 0.1
   cameraMovingTime: 3
+  dustFlashTime: 1
+  dustFlashSize: 0.2
+  dustFlashTweenConfig: 34
 --- !u!114 &114542628113678184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,6 +102,9 @@ MonoBehaviour:
     objectsOn:
     - {fileID: 0}
     objectsOff:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
   - name: 4
     view: {fileID: 0}

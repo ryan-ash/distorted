@@ -48,11 +48,21 @@ public class ConversionTableController : MonoBehaviour {
         if (isPlayerOneSymbol) {
             index = P1Symbols.IndexOf(name);
             P1Symbols.RemoveAt(index);
-            instance.P1Holder.GetChild(index).gameObject.GetComponent<SymbolController>().Fade(1, 0, true);
+            foreach (Transform symbolTransform in instance.P1Holder) {
+                SymbolController symbol = symbolTransform.gameObject.GetComponent<SymbolController>();
+                if (symbol.iconHolder.name == name) {
+                    symbol.Fade(1, 0, true);
+                }
+            }
         } else {
             index = P2Symbols.IndexOf(name);
             P2Symbols.RemoveAt(index);
-            instance.P2Holder.GetChild(index).gameObject.GetComponent<SymbolController>().Fade(1, 0, true);
+            foreach (Transform symbolTransform in instance.P2Holder) {
+                SymbolController symbol = symbolTransform.gameObject.GetComponent<SymbolController>();
+                if (symbol.iconHolder.name == name) {
+                    symbol.Fade(1, 0, true);
+                }
+            }
         }
 
         Shift(isPlayerOneSymbol);

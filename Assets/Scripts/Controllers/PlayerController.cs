@@ -29,9 +29,12 @@ public class PlayerController : MonoBehaviour {
 
     private float currentPulsatingTimer = 0f;
     private Vector3 C1ScaleUpFrom, C2ScaleUpFrom;
-
-    private string lastMarkedSymbol = "";
     private GameObject lastMarkedSymbolObject;
+
+    [HideInInspector]
+    public string lastMarkedSymbol = "";
+
+    public List<GameObject> sentSymbolsInProgress = new List<GameObject>();
 
     public static Dictionary<PlayerNumber, PlayerController> players = new Dictionary<PlayerNumber, PlayerController>();
 
@@ -61,9 +64,6 @@ public class PlayerController : MonoBehaviour {
         else
             result = ConversionTableController.IsMatch(name, players[playerNumber].lastMarkedSymbol);
 
-        if (result == true) {
-            Destroy(players[playerNumber].lastMarkedSymbolObject);
-        }
         return result;
     }
 
@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TryActivateSymbolAndReturn(Transform anchor, GameObject symbolSlot, MoveDirection direction) {
         if (symbolSlot != null && canSend && !alreadySent) {
+            sentSymbolsInProgress.Add(symbolSlot);
             symbolSlot.SendMessage("MarkToMove");
             lastMarkedSymbol = symbolSlot.GetComponent<FontAwesome3D>().name;
             lastMarkedSymbolObject = symbolSlot;

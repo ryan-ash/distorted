@@ -14,10 +14,12 @@ public class SymbolController : MonoBehaviour {
     private Transform targetPrePlayer, targetPlayer;
     private Vector3 movementFrom;
     private Quaternion rotationFrom;
-    private PlayerNumber targetPlayerNumber;
+    private PlayerNumber targetPlayerNumber, parentPlayerNumber;
     private float currentHighlightTimer;
 
     private bool markedToMove = false;
+    private bool positiveDeath = false;
+    private bool reverse = false;
 
     public void SetRandom() {
         iconHolder.SetRandomIcon();
@@ -31,11 +33,22 @@ public class SymbolController : MonoBehaviour {
     public void AimAtPlayer(bool aimAtPlayerOne) {
         aimedAtPlayerOne = aimAtPlayerOne;
         targetPlayerNumber = (aimAtPlayerOne) ? PlayerNumber.One : PlayerNumber.Two;
+        parentPlayerNumber = (aimAtPlayerOne) ? PlayerNumber.Two : PlayerNumber.One;
     }
 
     public void MarkToMove() {
         Highlight();
         markedToMove = true;
+
+        return;
+        int count = PlayerController.players[targetPlayerNumber].sentSymbolsInProgress.Count;
+        if (count == 0)
+            return;
+        
+        string name = PlayerController.players[targetPlayerNumber].sentSymbolsInProgress[0].GetComponent<FontAwesome3D>().name;
+        if (PlayerController.CheckMatch(name, parentPlayerNumber)) {
+            reverse = true;
+        }
     }
 
     private void Update() {
@@ -50,7 +63,11 @@ public class SymbolController : MonoBehaviour {
             return;
         
         markedToMove = false;
-        targetPrePlayer = (aimedAtPlayerOne) ? RhythmManager.instance.PreP1Conversion : RhythmManager.instance.PreP2Conversion;
+        // if (!reverse) {
+            targetPrePlayer = (aimedAtPlayerOne) ? RhythmManager.instance.PreP1Conversion : RhythmManager.instance.PreP2Conversion;
+        // } else {
+            // targetPrePlayer = (!aimedAtPlayerOne) ? RhythmManager.instance.PreP1Conversion : RhythmManager.instance.PreP2Conversion;            
+        // }
         targetPlayer = (aimedAtPlayerOne) ? RhythmManager.instance.P1Target : RhythmManager.instance.P2Target;
         movementFrom = transform.position;
         rotationFrom = transform.rotation;
@@ -100,10 +117,14 @@ public class SymbolController : MonoBehaviour {
 
     private void Die() {
         bool positiveDeath = PlayerController.CheckMatch(iconHolder.name, targetPlayerNumber);
+        if (positiveDeath) {
+            DustController.Flash();
+        }
         int delta = (positiveDeath) ? SettingsManager.instance.positiveMatchScore : SettingsManager.instance.negativeMatchScore;
         PlayerController.players[targetPlayerNumber].scorebar.UpdateScore(delta);
         PlayerController.players[targetPlayerNumber].PlaySound(positiveDeath ? "Receive" : "Miss");
         Fade(1, 0, true);
         ConversionTableController.RemoveSymbol(iconHolder.name, !aimedAtPlayerOne);
+        PlayerController.players[parentPlayerNumber].sentSymbolsInProgress.Remove(gameObject);
     }
 }
