@@ -33,7 +33,8 @@ public class SettingsManager : MonoBehaviour {
 
     [Header("Effects")]    
     public float dustFlashTime = 0.04166602f;
-    public float dustFlashSize = 0.2f;
+    public float dustSmallFlashSize = 0.05f;
+    public float dustBigFlashSize = 0.2f;
     public LeanTweenType dustFlashTweenConfig;
     public float tableHighlightTime = 0.04166602f;
 

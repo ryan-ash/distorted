@@ -122,9 +122,7 @@ public class SymbolController : MonoBehaviour {
 
     private void Die() {
         bool positiveDeath = PlayerController.CheckMatch(iconHolder.name, targetPlayerNumber);
-        if (positiveDeath) {
-            DustController.Flash();
-        }
+        DustController.Flash(positiveDeath);
         int delta = (positiveDeath) ? SettingsManager.instance.positiveMatchScore : SettingsManager.instance.negativeMatchScore;
         PlayerController.players[targetPlayerNumber].scorebar.UpdateScore(delta);
         PlayerController.players[targetPlayerNumber].PlaySound(positiveDeath ? "Receive" : "Miss");
