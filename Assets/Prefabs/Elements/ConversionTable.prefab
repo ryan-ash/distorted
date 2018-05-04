@@ -666,4 +666,5 @@ MonoBehaviour:
     type: 2}
   lineTemplate: {fileID: 1845017427991212, guid: 38388cc51b814a94783f1dfdb89d9274,
     type: 2}
+  highlights: {fileID: 4471415256516548}
   distanceBetweenSymbols: 0.4

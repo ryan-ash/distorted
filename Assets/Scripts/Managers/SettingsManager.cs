@@ -35,6 +35,7 @@ public class SettingsManager : MonoBehaviour {
     public float dustFlashTime = 0.04166602f;
     public float dustFlashSize = 0.2f;
     public LeanTweenType dustFlashTweenConfig;
+    public float tableHighlightTime = 0.04166602f;
 
     public float scaleDelta {
         get {

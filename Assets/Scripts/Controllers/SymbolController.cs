@@ -42,6 +42,7 @@ public class SymbolController : MonoBehaviour {
 
     public void MarkToMove() {
         Highlight();
+        ConversionTableController.HighlightLineByName(iconHolder.name);
         markedToMove = true;
 
         return;

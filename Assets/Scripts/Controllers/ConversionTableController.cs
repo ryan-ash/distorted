@@ -26,6 +26,7 @@ public class ConversionTableController : MonoBehaviour {
     public Transform P1Holder, P2Holder;
     public GameObject symbolTemplate;
     public GameObject lineTemplate;
+    public Transform highlights;
     public float distanceBetweenSymbols = 0.25f;
 
     private bool P1Ready = false, P2Ready = false;
@@ -33,6 +34,7 @@ public class ConversionTableController : MonoBehaviour {
     public static ConversionTableController instance;
     private static List<ConversionTableLine> P1Symbols = new List<ConversionTableLine>();
     private static List<ConversionTableLine> P2Symbols = new List<ConversionTableLine>();
+    private static List<int> highlightCounters = new List<int>() {0,0,0,0};
 
     void Awake() {
         instance = this;
@@ -68,6 +70,8 @@ public class ConversionTableController : MonoBehaviour {
     }
 
     public static void RemoveSymbol(string name, bool isPlayerOneSymbol) {
+        HighlightLineByName(name, false);
+
         int index = 0;
         if (isPlayerOneSymbol) {
             for(int i = 0; i < P1Symbols.Count; i++) {
@@ -215,5 +219,52 @@ public class ConversionTableController : MonoBehaviour {
             }
         }
         return found;
+    }
+
+    public static void HighlightLineByName(string name, bool highlight = true) {
+        int lineNumber = -1;
+        for (int i = 0; i < P1Symbols.Count; i++) {
+            if (P1Symbols[i].symbols.Contains(name)) {
+                lineNumber = i;
+                break;
+            }
+        }
+        for (int i = 0; i < P2Symbols.Count; i++) {
+            if (P2Symbols[i].symbols.Contains(name)) {
+                lineNumber = i;
+                break;
+            }
+        }
+
+        highlightCounters[lineNumber] += (highlight) ? 1 : -1;
+        GameObject hightlightBar = instance.highlights.GetChild(lineNumber).gameObject;
+
+        if (highlight) {
+            float initialValue = hightlightBar.GetComponent<Renderer>().material.GetColor("_Color").a;
+            LeanTween.value(hightlightBar, initialValue, 1f, SettingsManager.instance.tableHighlightTime).setOnUpdate(
+                (float value) => {
+                    Color tmpColor = hightlightBar.GetComponent<Renderer>().material.GetColor("_Color");
+                    tmpColor.a = value;
+                    hightlightBar.GetComponent<Renderer>().material.SetColor("_Color", tmpColor);
+                }
+            ).setEase(SettingsManager.instance.globalTweenConfig).setOnComplete(() => {
+                LeanTween.value(hightlightBar, 1f, 0.5f, SettingsManager.instance.tableHighlightTime / 2).setOnUpdate(
+                    (float value) => {
+                        Color tmpColor = hightlightBar.GetComponent<Renderer>().material.GetColor("_Color");
+                        tmpColor.a = value;
+                        hightlightBar.GetComponent<Renderer>().material.SetColor("_Color", tmpColor);
+                    }
+                ).setEase(SettingsManager.instance.globalTweenConfig);
+            });
+        } else if (highlightCounters[lineNumber] == 0) {
+            float initialValue = hightlightBar.GetComponent<Renderer>().material.GetColor("_Color").a;
+            LeanTween.value(hightlightBar, initialValue, 0f, SettingsManager.instance.tableHighlightTime).setOnUpdate(
+                (float value) => {
+                    Color tmpColor = hightlightBar.GetComponent<Renderer>().material.GetColor("_Color");
+                    tmpColor.a = value;
+                    hightlightBar.GetComponent<Renderer>().material.SetColor("_Color", tmpColor);
+                }
+            ).setEase(SettingsManager.instance.globalTweenConfig);
+        }
     }
 }
