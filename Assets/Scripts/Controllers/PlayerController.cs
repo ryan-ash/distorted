@@ -38,11 +38,21 @@ public class PlayerController : MonoBehaviour {
 
     public static Dictionary<PlayerNumber, PlayerController> players = new Dictionary<PlayerNumber, PlayerController>();
 
+    private Dictionary<MoveDirection, Transform> directionToAnchor;
+
     void Start() {
-        topSymbol = SpawnSymbol(topAnchor);
-        rightSymbol = SpawnSymbol(rightAnchor);
-        bottomSymbol = SpawnSymbol(bottomAnchor);
-        leftSymbol = SpawnSymbol(leftAnchor);
+        directionToAnchor = new Dictionary<MoveDirection, Transform>() {
+            {MoveDirection.Top, topAnchor},
+            {MoveDirection.Right, rightAnchor},
+            {MoveDirection.Bottom, bottomAnchor},
+            {MoveDirection.Left, leftAnchor}
+        };
+
+        topSymbol = SpawnSymbol(MoveDirection.Top);
+        rightSymbol = SpawnSymbol(MoveDirection.Right);
+        bottomSymbol = SpawnSymbol(MoveDirection.Bottom);
+        leftSymbol = SpawnSymbol(MoveDirection.Left);
+
         initialPosition = transform.position;
         players[playerNumber] = this;
         ConversionTableController.Init(playerNumber == PlayerNumber.One ? true : false);
@@ -81,7 +91,8 @@ public class PlayerController : MonoBehaviour {
         innerCircle2.material.color = innerCircle2Color;
     }
 
-    private GameObject SpawnSymbol(Transform anchor, bool updateConversionTable = false) {
+    private GameObject SpawnSymbol(MoveDirection direction, bool updateConversionTable = false) {
+        Transform anchor = directionToAnchor[direction];
         GameObject spawnedSymbol = Instantiate(symbolTemplate) as GameObject;
         spawnedSymbol.transform.SetParent(symbolHolder, false);
         spawnedSymbol.transform.position = anchor.position + symbolSpawnDelta;
@@ -89,7 +100,7 @@ public class PlayerController : MonoBehaviour {
         spawnedSymbol.SendMessage("ChangeColor", symbolColor);
         spawnedSymbol.SendMessage("AimAtPlayer", playerNumber == PlayerNumber.One ? false : true);
 
-        ConversionTableController.AddSymbol(spawnedSymbol.GetComponent<FontAwesome3D>().name, playerNumber == PlayerNumber.One ? true : false, updateConversionTable);            
+        ConversionTableController.AddSymbol(direction, spawnedSymbol.GetComponent<FontAwesome3D>().name, playerNumber == PlayerNumber.One ? true : false, !updateConversionTable);            
 
         return spawnedSymbol;
     }
@@ -201,16 +212,16 @@ public class PlayerController : MonoBehaviour {
             Wait.Run(SettingsManager.instance.symbolRespawnTime, () => {
                 switch (direction) {
                     case MoveDirection.Top:
-                        topSymbol = SpawnSymbol(anchor, true);
+                        topSymbol = SpawnSymbol(direction, true);
                         break;
                     case MoveDirection.Right:
-                        rightSymbol = SpawnSymbol(anchor, true);
+                        rightSymbol = SpawnSymbol(direction, true);
                         break;
                     case MoveDirection.Bottom:
-                        bottomSymbol = SpawnSymbol(anchor, true);
+                        bottomSymbol = SpawnSymbol(direction, true);
                         break;
                     case MoveDirection.Left:
-                        leftSymbol = SpawnSymbol(anchor, true);
+                        leftSymbol = SpawnSymbol(direction, true);
                         break;
                 }
             });
