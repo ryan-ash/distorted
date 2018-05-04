@@ -22,7 +22,11 @@ public class SymbolController : MonoBehaviour {
     private bool reverse = false;
 
     public void SetRandom() {
-        iconHolder.SetRandomIcon();
+        bool uniqueIconFound = false;
+        while(!uniqueIconFound) {
+            iconHolder.SetRandomIcon();
+            uniqueIconFound = !ConversionTableController.SymbolPresent(iconHolder.name);
+        }
         Fade(0f, 1f);
     }
 

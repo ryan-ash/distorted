@@ -136,4 +136,8 @@ public class ConversionTableController : MonoBehaviour {
                 index += 1;
         }        
     }
+
+    public static bool SymbolPresent(string name) {
+        return P1Symbols.Contains(name) || P2Symbols.Contains(name);
+    }
 }
