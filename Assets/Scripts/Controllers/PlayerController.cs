@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour {
     private bool alreadySent = false;
 
     private float currentPulsatingTimer = 0f;
+    private float fastCircle1InitialSpeed;
+    private float fastCircle2InitialSpeed;
     private Vector3 C1ScaleUpFrom, C2ScaleUpFrom, C1ScaleUpTo, C2ScaleUpTo;
     private GameObject lastMarkedSymbolObject;
 
@@ -62,6 +64,8 @@ public class PlayerController : MonoBehaviour {
         C2ScaleUpTo = C2ScaleUpFrom * SettingsManager.instance.playerPulseScaleUpTo;
         innerCircle1Color = innerCircle1.material.color;
         innerCircle2Color = innerCircle2.material.color;
+        fastCircle1InitialSpeed = fastCircle1.GetComponent<Rotator>().rotationSpeed;
+        fastCircle2InitialSpeed = fastCircle1.GetComponent<Rotator>().rotationSpeed;
     }
 
     void Update() {
@@ -135,6 +139,9 @@ public class PlayerController : MonoBehaviour {
         innerCircle1.material.SetColor("_EmissionColor", forward ? SettingsManager.instance.activeEmissionColor : Color.black);
         innerCircle2.material.SetColor("_EmissionColor", forward ? SettingsManager.instance.activeEmissionColor : Color.black);
         innerCircle2.gameObject.SetActive(forward);
+        
+        fastCircle1.GetComponent<Rotator>().rotationSpeed = forward ? fastCircle1InitialSpeed : fastCircle1InitialSpeed / SettingsManager.instance.rotationSpeedDivider;
+        fastCircle2.GetComponent<Rotator>().rotationSpeed = forward ? fastCircle2InitialSpeed : fastCircle2InitialSpeed / SettingsManager.instance.rotationSpeedDivider;
     }
 
     private void Scale(bool forward) {
