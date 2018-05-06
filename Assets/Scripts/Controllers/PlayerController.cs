@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     private bool alreadySent = false;
 
     private float currentPulsatingTimer = 0f;
-    private Vector3 C1ScaleUpFrom, C2ScaleUpFrom;
+    private Vector3 C1ScaleUpFrom, C2ScaleUpFrom, C1ScaleUpTo, C2ScaleUpTo;
     private GameObject lastMarkedSymbolObject;
 
     [HideInInspector]
@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour {
         ConversionTableController.Init(playerNumber == PlayerNumber.One ? true : false);
         C1ScaleUpFrom = fastCircle1.localScale;
         C2ScaleUpFrom = fastCircle2.localScale;
+        C1ScaleUpTo = C1ScaleUpFrom * SettingsManager.instance.playerPulseScaleUpTo;
+        C2ScaleUpTo = C2ScaleUpFrom * SettingsManager.instance.playerPulseScaleUpTo;
         innerCircle1Color = innerCircle1.material.color;
         innerCircle2Color = innerCircle2.material.color;
     }
@@ -79,16 +81,6 @@ public class PlayerController : MonoBehaviour {
 
     public void PlaySound(string name) {
         AudioManager.instance.PlaySound("P" + ((int)playerNumber).ToString() + "/" + name);
-    }
-
-    private void LightUp() {
-        innerCircle1.material.color = Color.white;
-        innerCircle2.material.color = Color.white;
-    }
-
-    private void LightDown() {
-        innerCircle1.material.color = innerCircle1Color;
-        innerCircle2.material.color = innerCircle2Color;
     }
 
     private GameObject SpawnSymbol(MoveDirection direction, bool updateConversionTable = false) {
@@ -137,32 +129,34 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void LightUp(bool forward) {
+        innerCircle1.material.color = forward ? Color.white : innerCircle1Color;
+        innerCircle2.material.color = forward ? Color.white : innerCircle2Color;
+        innerCircle1.material.SetColor("_EmissionColor", forward ? SettingsManager.instance.activeEmissionColor : Color.black);
+        innerCircle2.material.SetColor("_EmissionColor", forward ? SettingsManager.instance.activeEmissionColor : Color.black);
+        innerCircle2.gameObject.SetActive(forward);
+    }
+
+    private void Scale(bool forward) {
+        float startValue = forward ? 0f : 1f;
+        float endValue = !forward ? 0f : 1f;
+
+        LeanTween.value(fastCircle1.gameObject, startValue, endValue, SettingsManager.instance.playerPulsatingSwitchTime).setOnUpdate(
+            (float value) => {
+                fastCircle1.localScale = Vector3.Lerp(C1ScaleUpFrom, C1ScaleUpTo, value);
+                fastCircle2.localScale = Vector3.Lerp(C2ScaleUpFrom, C2ScaleUpTo, value);
+            }
+        ).setEase(SettingsManager.instance.globalTweenConfig);
+
+    }
+
     private void HandlePulsating() {
         if (currentPulsatingTimer <= 0f) {
             canSend = !canSend;
             currentPulsatingTimer += SettingsManager.instance.playerActivePassiveTime;
-            if (canSend) {
-                alreadySent = false;
-                LightUp();
-                Vector3 C1ScaleUpTo = C1ScaleUpFrom * SettingsManager.instance.playerPulseScaleUpTo;
-                Vector3 C2ScaleUpTo = C2ScaleUpFrom * SettingsManager.instance.playerPulseScaleUpTo;
-                LeanTween.value(fastCircle1.gameObject, 0f, 1f, SettingsManager.instance.playerPulsatingSwitchTime).setOnUpdate(
-                    (float value) => {
-                        fastCircle1.localScale = Vector3.Lerp(C1ScaleUpFrom, C1ScaleUpTo, value);
-                        fastCircle2.localScale = Vector3.Lerp(C2ScaleUpFrom, C2ScaleUpTo, value);
-                    }
-                ).setEase(SettingsManager.instance.globalTweenConfig);
-            } else {
-                LightDown();
-                Vector3 C1ScaleDownFrom = fastCircle1.localScale;
-                Vector3 C2ScaleDownFrom = fastCircle2.localScale;
-                LeanTween.value(fastCircle1.gameObject, 0f, 1f, SettingsManager.instance.playerPulsatingSwitchTime).setOnUpdate(
-                    (float value) => {
-                        fastCircle1.localScale = Vector3.Lerp(C1ScaleDownFrom, C1ScaleUpFrom, value);
-                        fastCircle2.localScale = Vector3.Lerp(C2ScaleDownFrom, C2ScaleUpFrom, value);
-                    }
-                ).setEase(SettingsManager.instance.globalTweenConfig);                       
-            }
+            LightUp(canSend);
+            Scale(canSend);
+            alreadySent = canSend ? false : alreadySent;
         }
         currentPulsatingTimer -= Time.deltaTime;
     }
@@ -191,7 +185,7 @@ public class PlayerController : MonoBehaviour {
             lastMarkedSymbolObject = symbolSlot;
             scorebar.UpdateScore(SettingsManager.instance.sendScore);
             alreadySent = true;
-            LightDown();
+            LightUp(false);
             // PlaySound("Send");
 
             switch (direction) {

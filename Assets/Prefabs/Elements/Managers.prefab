@@ -70,11 +70,14 @@ MonoBehaviour:
   playerActivePassiveTime: 0.66665626
   playerPulsatingSwitchTime: 0.05
   playerPulseScaleUpTo: 1.5
+  activeEmissionColor: {r: 0.19215687, g: 0.19215687, b: 0.19215687, a: 1}
   conversionTableShiftTime: 0.1
   cameraMovingTime: 3
   dustFlashTime: 1
-  dustFlashSize: 0.2
+  dustSmallFlashSize: 0.05
+  dustBigFlashSize: 0.2
   dustFlashTweenConfig: 34
+  tableHighlightTime: 0.04166602
 --- !u!114 &114542628113678184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,7 +113,7 @@ MonoBehaviour:
     view: {fileID: 0}
     objectsOn: []
     objectsOff: []
-  startState: 1
+  startState: 3
 --- !u!114 &114561339869359712
 MonoBehaviour:
   m_ObjectHideFlags: 1

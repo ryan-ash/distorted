@@ -24,6 +24,7 @@ public class SettingsManager : MonoBehaviour {
     public float playerActivePassiveTime = 0.5f;
     public float playerPulsatingSwitchTime = 0.05f;
     public float playerPulseScaleUpTo = 1.5f;
+    public Color activeEmissionColor = Color.grey;
 
     [Header("Conversion Table")]
     public float conversionTableShiftTime = 0.1f;    
