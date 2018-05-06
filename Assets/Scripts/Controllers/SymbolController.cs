@@ -15,6 +15,7 @@ public class SymbolController : MonoBehaviour {
     private Vector3 movementFrom;
     private Quaternion rotationFrom;
     private PlayerNumber targetPlayerNumber, parentPlayerNumber;
+    private DustController reflectDustController, hitDustController;
     private float currentHighlightTimer;
 
     private bool markedToMove = false;
@@ -38,6 +39,8 @@ public class SymbolController : MonoBehaviour {
         aimedAtPlayerOne = aimAtPlayerOne;
         targetPlayerNumber = (aimAtPlayerOne) ? PlayerNumber.One : PlayerNumber.Two;
         parentPlayerNumber = (aimAtPlayerOne) ? PlayerNumber.Two : PlayerNumber.One;
+        reflectDustController = DustController.controllers[!aimAtPlayerOne ? 2 : 1];
+        hitDustController = DustController.controllers[aimAtPlayerOne ? 2 : 1];
     }
 
     public void MarkToMove() {
@@ -122,7 +125,12 @@ public class SymbolController : MonoBehaviour {
 
     private void Die() {
         bool positiveDeath = PlayerController.CheckMatch(iconHolder.name, targetPlayerNumber);
-        DustController.Flash(positiveDeath);
+        if (positiveDeath) {
+            reflectDustController.Flash(true);
+        } else {
+            hitDustController.Flash(false);
+            PlayerController.players[parentPlayerNumber].scorebar.UpdateScore(SettingsManager.instance.sendScore);
+        }
         int delta = (positiveDeath) ? SettingsManager.instance.positiveMatchScore : SettingsManager.instance.negativeMatchScore;
         PlayerController.players[targetPlayerNumber].scorebar.UpdateScore(delta);
         PlayerController.players[targetPlayerNumber].PlaySound(positiveDeath ? "Receive" : "Miss");

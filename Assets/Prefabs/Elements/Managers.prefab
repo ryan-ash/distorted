@@ -64,13 +64,14 @@ MonoBehaviour:
   sendScore: 5
   minScorebarScale: 1
   maxScorebarScale: 27
-  scoreGrowthTime: 0.08333203
+  scoreGrowthTime: 0.5
   maxScore: 200
   playerMoveTime: 0.041666016
   playerActivePassiveTime: 0.66665626
   playerPulsatingSwitchTime: 0.05
   playerPulseScaleUpTo: 1.5
   activeEmissionColor: {r: 0.19215687, g: 0.19215687, b: 0.19215687, a: 1}
+  rotationSpeedDivider: 5
   conversionTableShiftTime: 0.1
   cameraMovingTime: 3
   dustFlashTime: 1
@@ -113,7 +114,7 @@ MonoBehaviour:
     view: {fileID: 0}
     objectsOn: []
     objectsOff: []
-  startState: 3
+  startState: 0
 --- !u!114 &114561339869359712
 MonoBehaviour:
   m_ObjectHideFlags: 1

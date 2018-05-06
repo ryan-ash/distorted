@@ -190,7 +190,6 @@ public class PlayerController : MonoBehaviour {
             symbolSlot.SendMessage("MarkToMove");
             lastMarkedSymbol = symbolSlot.GetComponent<FontAwesome3D>().name;
             lastMarkedSymbolObject = symbolSlot;
-            scorebar.UpdateScore(SettingsManager.instance.sendScore);
             alreadySent = true;
             LightUp(false);
             // PlaySound("Send");
