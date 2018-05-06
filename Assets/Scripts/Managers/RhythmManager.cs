@@ -136,6 +136,10 @@ public class RhythmManager : MonoBehaviour {
                 isGameOver = true;
                 CameraSetController.MoveToPlayer(P1Scorebar.currentScore > P2Scorebar.currentScore);
                 GameManager.ChangeGameStateTo(GameState.GameOver);
+                PlayerController.players[PlayerNumber.One].LightUp(P1Scorebar.currentScore > P2Scorebar.currentScore);
+                PlayerController.players[PlayerNumber.Two].LightUp(P1Scorebar.currentScore < P2Scorebar.currentScore);
+                PlayerController.players[PlayerNumber.One].Scale(P1Scorebar.currentScore > P2Scorebar.currentScore);
+                PlayerController.players[PlayerNumber.Two].Scale(P1Scorebar.currentScore < P2Scorebar.currentScore);
                 break;
         }
         currentLoopTimer += currentRoundLength;

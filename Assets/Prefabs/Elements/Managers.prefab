@@ -72,6 +72,12 @@ MonoBehaviour:
   playerPulseScaleUpTo: 1.5
   activeEmissionColor: {r: 0.19215687, g: 0.19215687, b: 0.19215687, a: 1}
   rotationSpeedDivider: 5
+  inputHumanization: 0.1
+  attackChance: 0.8
+  reflectChance: 0.5
+  aiInputHang: 0.2
+  shouldReflect: 1
+  shouldProduceRandomInput: 1
   conversionTableShiftTime: 0.1
   cameraMovingTime: 3
   dustFlashTime: 1
@@ -99,8 +105,13 @@ MonoBehaviour:
     objectsOff: []
   - name: 2
     view: {fileID: 0}
-    objectsOn: []
-    objectsOff: []
+    objectsOn:
+    - {fileID: 0}
+    objectsOff:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - name: 3
     view: {fileID: 0}
     objectsOn:
@@ -114,7 +125,8 @@ MonoBehaviour:
     view: {fileID: 0}
     objectsOn: []
     objectsOff: []
-  startState: 0
+  startState: 2
+  secondPlayer: {fileID: 0}
 --- !u!114 &114561339869359712
 MonoBehaviour:
   m_ObjectHideFlags: 1

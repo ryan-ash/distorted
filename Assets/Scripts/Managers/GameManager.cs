@@ -24,7 +24,11 @@ public class GameManager : MonoBehaviour {
 	public GameStateNode[] gameStates;
 	public GameState startState = GameState.MainMenu;
 
+	public GameObject secondPlayer;
+
 	private static Dictionary<GameState, GameStateNode> gameStatesDict;
+
+	private static GameState currentGameMode;
 
 	public static bool doRestart = false;
 	public static bool gameStarted = false;
@@ -47,7 +51,7 @@ public class GameManager : MonoBehaviour {
 
 		if (doRestart) {
 			doRestart = false;
-			startState = GameState.MultiPlayer;
+			startState = currentGameMode;
 		}
 
 		ChangeGameStateTo(startState);
@@ -89,9 +93,13 @@ public class GameManager : MonoBehaviour {
 				break;
 			case GameState.SinglePlayer:
 				gameStarted = true;
+				instance.secondPlayer.GetComponent<AIController>().enabled = true;
+				currentGameMode = state;
 				break;
 			case GameState.MultiPlayer:
 				gameStarted = true;
+				instance.secondPlayer.GetComponent<PlayerController>().enabled = true;
+				currentGameMode = state;
 				break;
 			case GameState.GameOver:
 				gameStarted = false;

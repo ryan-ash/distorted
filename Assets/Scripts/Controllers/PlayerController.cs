@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
     public Renderer innerCircle1, innerCircle2;
     public Transform symbolHolder;
 
-    private GameObject topSymbol, rightSymbol, bottomSymbol, leftSymbol;
+    protected GameObject topSymbol, rightSymbol, bottomSymbol, leftSymbol;
     private Vector3 initialPosition;
     private Vector3 movementFrom;
 
@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour {
 
     private bool inputCooldown = false;
     private bool topCooldown, rightCooldown, bottomCooldown, leftCooldown;
-    private bool canSend = false;
+    protected bool canSend = false;
     private bool alreadySent = false;
 
-    private float currentPulsatingTimer = 0f;
+    protected float currentPulsatingTimer = 0f;
     private float fastCircle1InitialSpeed;
     private float fastCircle2InitialSpeed;
     private Vector3 C1ScaleUpFrom, C2ScaleUpFrom, C1ScaleUpTo, C2ScaleUpTo;
@@ -43,6 +43,21 @@ public class PlayerController : MonoBehaviour {
     private Dictionary<MoveDirection, Transform> directionToAnchor;
 
     void Start() {
+        Init();
+    }
+
+    void Update() {
+        if (!GameManager.gameStarted)
+            return;
+
+        float xInput = Input.GetAxis("P" + ((int)playerNumber).ToString() + "X");
+        float yInput = Input.GetAxis("P" + ((int)playerNumber).ToString() + "Y");
+
+        HandleMovement(xInput, yInput);
+        HandlePulsating();
+    }
+
+    protected void Init() {
         directionToAnchor = new Dictionary<MoveDirection, Transform>() {
             {MoveDirection.Top, topAnchor},
             {MoveDirection.Right, rightAnchor},
@@ -66,11 +81,6 @@ public class PlayerController : MonoBehaviour {
         innerCircle2Color = innerCircle2.material.color;
         fastCircle1InitialSpeed = fastCircle1.GetComponent<Rotator>().rotationSpeed;
         fastCircle2InitialSpeed = fastCircle1.GetComponent<Rotator>().rotationSpeed;
-    }
-
-    void Update() {
-        HandleMovement();
-        HandlePulsating();
     }
 
     public static bool CheckMatch(string name, PlayerNumber playerNumber) {
@@ -101,12 +111,9 @@ public class PlayerController : MonoBehaviour {
         return spawnedSymbol;
     }
 
-    protected virtual void HandleMovement() {
+    protected void HandleMovement(float xInput, float yInput) {
         if (inputCooldown)
             return;
-
-        float xInput = Input.GetAxis("P" + ((int)playerNumber).ToString() + "X");
-        float yInput = Input.GetAxis("P" + ((int)playerNumber).ToString() + "Y");
 
         if (xInput > 0f && !rightCooldown) {
             Move(rightAnchor, rightSymbol, MoveDirection.Right);
@@ -133,7 +140,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void LightUp(bool forward) {
+    public void LightUp(bool forward) {
         innerCircle1.material.color = forward ? Color.white : innerCircle1Color;
         innerCircle2.material.color = forward ? Color.white : innerCircle2Color;
         innerCircle1.material.SetColor("_EmissionColor", forward ? SettingsManager.instance.activeEmissionColor : Color.black);
@@ -144,7 +151,7 @@ public class PlayerController : MonoBehaviour {
         fastCircle2.GetComponent<Rotator>().rotationSpeed = forward ? fastCircle2InitialSpeed : fastCircle2InitialSpeed / SettingsManager.instance.rotationSpeedDivider;
     }
 
-    private void Scale(bool forward) {
+    public void Scale(bool forward) {
         float startValue = forward ? 0f : 1f;
         float endValue = !forward ? 0f : 1f;
 
@@ -157,15 +164,19 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    private void HandlePulsating() {
+    protected void HandlePulsating() {
         if (currentPulsatingTimer <= 0f) {
-            canSend = !canSend;
             currentPulsatingTimer += SettingsManager.instance.playerActivePassiveTime;
+            ActivateDeactive();
             LightUp(canSend);
             Scale(canSend);
             alreadySent = canSend ? false : alreadySent;
         }
         currentPulsatingTimer -= Time.deltaTime;
+    }
+
+    protected virtual void ActivateDeactive() {
+        canSend = !canSend;
     }
 
     private void Move(Transform anchor, GameObject symbolSlot, MoveDirection direction) {

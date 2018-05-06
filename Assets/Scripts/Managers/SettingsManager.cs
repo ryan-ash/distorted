@@ -27,6 +27,14 @@ public class SettingsManager : MonoBehaviour {
     public Color activeEmissionColor = Color.grey;
     public float rotationSpeedDivider = 5;
 
+    [Header("AI")]
+    public float inputHumanization = 0.1f;
+    public float attackChance = 0.8f;
+    public float reflectChance = 0.5f;
+    public float aiInputHang = 0.1f;
+    public bool shouldReflect = true;
+    public bool shouldProduceRandomInput = true;
+
     [Header("Conversion Table")]
     public float conversionTableShiftTime = 0.1f;    
 

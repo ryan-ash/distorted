@@ -74,6 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4125771283070148}
   - component: {fileID: 114155681982879806}
+  - component: {fileID: 114005101808680476}
   m_Layer: 9
   m_Name: P2
   m_TagString: Untagged
@@ -458,6 +459,34 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114005101808680476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538124310570572}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939f8a50a8834ae46a664ddc839a011b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 2
+  symbolColor: {r: 0, g: 0, b: 0.30980393, a: 0}
+  topAnchor: {fileID: 0}
+  rightAnchor: {fileID: 0}
+  bottomAnchor: {fileID: 0}
+  leftAnchor: {fileID: 0}
+  symbolTemplate: {fileID: 1207670339061134, guid: 7bbe113c7715145468f449b11f9afb8e,
+    type: 2}
+  symbolSpawnDelta: {x: 0, y: 0, z: 0}
+  scorebar: {fileID: 0}
+  fastCircle1: {fileID: 4535825854428628}
+  fastCircle2: {fileID: 4592205139054704}
+  innerCircle1: {fileID: 23764179787752152}
+  innerCircle2: {fileID: 23402050595106642}
+  symbolHolder: {fileID: 0}
+  lastMarkedSymbol: 
+  sentSymbolsInProgress: []
 --- !u!114 &114101540304873634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -488,7 +517,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1538124310570572}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 642d6461955233d439900aeef7e43a2a, type: 3}
   m_Name: 
@@ -508,6 +537,8 @@ MonoBehaviour:
   innerCircle1: {fileID: 23764179787752152}
   innerCircle2: {fileID: 23402050595106642}
   symbolHolder: {fileID: 0}
+  lastMarkedSymbol: 
+  sentSymbolsInProgress: []
 --- !u!114 &114452478653162684
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -32,12 +32,14 @@ public class ConversionTableController : MonoBehaviour {
     private bool P1Ready = false, P2Ready = false;
 
     public static ConversionTableController instance;
-    private static List<ConversionTableLine> P1Symbols = new List<ConversionTableLine>();
-    private static List<ConversionTableLine> P2Symbols = new List<ConversionTableLine>();
+    private static List<ConversionTableLine> P1Symbols;
+    private static List<ConversionTableLine> P2Symbols;
     private static List<int> highlightCounters = new List<int>() {0,0,0,0};
 
     void Awake() {
         instance = this;
+        P1Symbols = new List<ConversionTableLine>();
+        P2Symbols = new List<ConversionTableLine>();
     }
 
     public static void AddSymbol(MoveDirection direction, string name, bool isPlayerOneSymbol, bool initial) {
@@ -132,6 +134,21 @@ public class ConversionTableController : MonoBehaviour {
         }
 
         return P1Index == P2Index && P1Index != -1;
+    }
+
+    public static List<string> GetMatchForAI(string name) {
+        int lineNumber = -1;
+        for(int i = 0; i < P1Symbols.Count; i++) {
+            if (P1Symbols[i].symbols.Contains(name)) {
+                lineNumber = i;
+                break;
+            }
+        }
+        if (lineNumber == -1) {
+            Debug.LogError("name match not found");
+            return new List<string>();
+        }
+        return P2Symbols[lineNumber].symbols;
     }
 
     public static void Init(bool isPlayerOneInit) {
