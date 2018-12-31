@@ -4,6 +4,8 @@ public class MainMenuScreenController : ScreenBaseController {
 
     private static MainMenuScreenController instance;
 
+    public string HomeURL = "http://trickychaos.com";
+
     void Start() {
         instance = this;
     }
@@ -22,5 +24,9 @@ public class MainMenuScreenController : ScreenBaseController {
 
     public void ClickQuit() {
         Application.Quit();
+    }
+
+    public void ClickCopyright() {
+        Application.OpenURL(HomeURL);
     }
 }
